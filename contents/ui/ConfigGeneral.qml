@@ -17,7 +17,8 @@ KCM.SimpleKCM {
     // Function to load and parse the services JSON file
     function loadServices() {
         var xhr = new XMLHttpRequest();
-        xhr.open("GET", Qt.resolvedUrl("../services.json"), false); // Synchronous request
+        var path = Plasmoid.file("", "services.json");
+        xhr.open("GET", path, false); // Synchronous request
         xhr.send();
         if (xhr.status === 200 || xhr.status === 0) { // status 0 for local files
             try {

@@ -11,7 +11,8 @@ PlasmoidItem {
     // Function to load and parse the services JSON file
     function loadServices() {
         var xhr = new XMLHttpRequest();
-        xhr.open("GET", Qt.resolvedUrl("../services.json"), false); // Synchronous request
+        var path = Plasmoid.file("", "services.json");
+        xhr.open("GET", path, false); // Synchronous request
         xhr.send();
         if (xhr.status === 200 || xhr.status === 0) { // status 0 for local files
             try {
@@ -38,9 +39,10 @@ PlasmoidItem {
             };
         });
         // Add custom sites from configuration to the models list
-        let customSites = plasmoid.configuration.customSites || [];
-        if (Array.isArray(customSites)) {
-            customSites.forEach((site) => {
+        let customSitesString = plasmoid.configuration.customSites || "";
+        if (customSitesString) {
+            let customSitesArray = customSitesString.split(',');
+            customSitesArray.forEach((site) => {
                 if (site && typeof site === 'string' && site.includes('|')) {
                     const [name, url] = site.split('|');
                     if (name && url)
