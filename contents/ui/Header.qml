@@ -74,6 +74,7 @@ RowLayout {
     PlasmaComponents3.ComboBox {
         id: urlComboBox
         Layout.fillWidth: true
+        visible: !plasmoid.configuration.hideUrlComboBox
         PlasmaComponents3.ToolTip.text: i18n("Select or enter chat website URL")
         PlasmaComponents3.ToolTip.delay: Kirigami.Units.toolTipDelay
         PlasmaComponents3.ToolTip.visible: hovered && !pressed

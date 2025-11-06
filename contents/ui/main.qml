@@ -112,7 +112,6 @@ PlasmoidItem {
     Component.onCompleted: {
         // If loadOnStartup is enabled in configuration
         if (plasmoid.configuration.loadOnStartup) {
-            webviewLoader.active = true; // Activate the WebView loader
             root.expanded = true; // Expand the plasmoid
         }
     }
@@ -122,7 +121,7 @@ PlasmoidItem {
         id: compactRep
 
         models: root.models
-        webview: root.webviewRoot ? root.webviewRoot.webview : null
+        webview: mainLayout && mainLayout.webviewRoot ? mainLayout.webviewRoot.webview : null
     }
 
     // Widget appearance when expanded (full view)

@@ -545,9 +545,9 @@ Action=Popup`
                                 text: i18n("Open Profile Folder")
                                 icon.name: "folder"
                                 onClicked: {
-                                    let profilePath = StandardPaths.writableLocation(StandardPaths.HomeLocation) +
-                                    "/.local/share/plasmashell/QtWebEngine/chat-ai";
-                                Qt.openUrlExternally(profilePath);
+                                    let profilePath = StandardPaths.writableLocation(StandardPaths.GenericDataLocation) +
+                                    "/plasmashell/QtWebEngine/chat-ai";
+                                Qt.openUrlExternally("file://" + profilePath);
                                 }
                             }
 
@@ -563,7 +563,7 @@ Action=Popup`
                     type: Kirigami.MessageType.Information
                     text: i18n("Cache location: %1\nProfile location: %2",
                                Qt.resolvedUrl(cacheProfile.cachePath).toString().replace("file://", ""),
-                               StandardPaths.writableLocation(StandardPaths.HomeLocation) + "/.local/share/plasmashell/QtWebEngine/chat-ai")
+                               StandardPaths.writableLocation(StandardPaths.GenericDataLocation) + "/plasmashell/QtWebEngine/chat-ai")
                     visible: true
                 }
 
