@@ -3,34 +3,17 @@ import QtQuick.Layouts
 import org.kde.kirigami 2.20 as Kirigami
 import org.kde.plasma.core as PlasmaCore
 import org.kde.plasma.plasmoid 2.0
+import "ServicesManager.js" as ServicesManager
 
 // Main plasmoid item that contains all the widget functionality
 PlasmoidItem {
     id: root
 
-    // Function to load and parse the services JSON file
-    function loadServices() {
-        var xhr = new XMLHttpRequest();
-        var path = Plasmoid.file("", "services.json");
-        xhr.open("GET", path, false); // Synchronous request
-        xhr.send();
-        if (xhr.status === 200 || xhr.status === 0) { // status 0 for local files
-            try {
-                return JSON.parse(xhr.responseText);
-            } catch (e) {
-                console.error("Failed to parse services.json:", e);
-                return [];
-            }
-        }
-        console.error("Failed to load services.json, status:", xhr.status);
-        return [];
-    }
-
     // Define the available chat models and their properties
     // This property combines both predefined and custom sites
     property var models: {
         // Load base models from the JSON file
-        let baseModels = loadServices().map(function(service) {
+        let baseModels = ServicesManager.loadServices(plasmoid).map(function(service) {
             return {
                 "id": service.id,
                 "url": service.url,

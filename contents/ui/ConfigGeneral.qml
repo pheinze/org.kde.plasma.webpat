@@ -7,6 +7,7 @@ import org.kde.kirigami 2.20 as Kirigami
 import org.kde.plasma.components as PlasmaComponents3
 import Qt.labs.platform 1.1
 import QtWebEngine
+import "ServicesManager.js" as ServicesManager
 
 // Main configuration component for general settings
 KCM.SimpleKCM {
@@ -14,26 +15,8 @@ KCM.SimpleKCM {
 
     property var services: []
 
-    // Function to load and parse the services JSON file
-    function loadServices() {
-        var xhr = new XMLHttpRequest();
-        var path = Plasmoid.file("", "services.json");
-        xhr.open("GET", path, false); // Synchronous request
-        xhr.send();
-        if (xhr.status === 200 || xhr.status === 0) { // status 0 for local files
-            try {
-                return JSON.parse(xhr.responseText);
-            } catch (e) {
-                console.error("Failed to parse services.json:", e);
-                return [];
-            }
-        }
-        console.error("Failed to load services.json, status:", xhr.status);
-        return [];
-    }
-
     Component.onCompleted: {
-        services = loadServices();
+        services = ServicesManager.loadServices(plasmoid);
     }
 
 
