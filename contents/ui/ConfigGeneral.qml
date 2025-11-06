@@ -12,6 +12,30 @@ import QtWebEngine
 KCM.SimpleKCM {
     id: configRoot
 
+    property var services: []
+
+    // Function to load and parse the services JSON file
+    function loadServices() {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", Qt.resolvedUrl("../services.json"), false); // Synchronous request
+        xhr.send();
+        if (xhr.status === 200 || xhr.status === 0) { // status 0 for local files
+            try {
+                return JSON.parse(xhr.responseText);
+            } catch (e) {
+                console.error("Failed to parse services.json:", e);
+                return [];
+            }
+        }
+        console.error("Failed to load services.json, status:", xhr.status);
+        return [];
+    }
+
+    Component.onCompleted: {
+        services = loadServices();
+    }
+
+
     // Parse the comma-separated string and add valid entries to the model
     function loadSitesFromConfig() {
         customSitesModel.clear();
@@ -115,63 +139,16 @@ KCM.SimpleKCM {
 
                 // Dynamic list of predefined sites with checkboxes
                 Repeater {
-                    // List of supported chat services with their configuration properties
-
-                    model: [{
-                        "id": "showDuckDuckGoChat",
-                        "text": "DuckDuckGo Chat"
-                    }, {
-                        "id": "showChatGPT",
-                        "text": "ChatGPT"
-                    }, {
-                        "id": "showHugginChat",
-                        "text": "HugginChat"
-                    }, {
-                        "id": "showGoogleGemini",
-                        "text": "Google Gemini"
-                    }, {
-                        "id": "showYou",
-                        "text": "You"
-                    }, {
-                        "id": "showPerplexity",
-                        "text": "Perplexity"
-                    }, {
-                        "id": "showBlackBox",
-                        "text": "BlackBox AI"
-                    }, {
-                        "id": "showBingCopilot",
-                        "text": "Bing Copilot"
-                    }, {
-                        "id": "showBigAGI",
-                        "text": "Big AGI"
-                    }, {
-                        "id": "showLobeChat",
-                        "text": "LobeChat"
-                    }, {
-                        "id": "showClaude",
-                        "text": "Claude"
-                    }, {
-                        "id": "showDeepSeek",
-                        "text": "DeepSeek"
-                    }, {
-                        "id": "showMetaAI",
-                        "text": "Meta AI"
-                    }, {
-                        "id": "showGrok",
-                        "text": "Grok"
-                    }, {
-                        "id": "showT3Chat",
-                        "text": "T3 Chat"
-                    }]
+                    model: configRoot.services
 
                     delegate: ColumnLayout {
                         Layout.fillWidth: true
                         spacing: 0
 
                         QQC2.CheckBox {
-                            text: modelData.text
-                            checked: plasmoid.configuration[modelData.id]
-                            onCheckedChanged: plasmoid.configuration[modelData.id] = checked
+                            text: modelData.name
+                            checked: plasmoid.configuration[modelData.config_key]
+                            onCheckedChanged: plasmoid.configuration[modelData.config_key] = checked
                             Layout.fillWidth: true
                         }
 
@@ -179,7 +156,7 @@ KCM.SimpleKCM {
                             Layout.fillWidth: true
                             type: Kirigami.MessageType.Information
                             text: i18n("Claude.ai only allows account creation or Google login in well-known browsers. To use it in this Plasmoid, you need to use login credentials previously created in a traditional browser.")
-                            visible: modelData.id === "showClaude" && plasmoid.configuration.showClaude
+                            visible: modelData.id === "claude" && plasmoid.configuration.showClaude
                         }
                     }
                 }

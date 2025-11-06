@@ -8,86 +8,35 @@ import org.kde.plasma.plasmoid 2.0
 PlasmoidItem {
     id: root
 
+    // Function to load and parse the services JSON file
+    function loadServices() {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", Qt.resolvedUrl("../services.json"), false); // Synchronous request
+        xhr.send();
+        if (xhr.status === 200 || xhr.status === 0) { // status 0 for local files
+            try {
+                return JSON.parse(xhr.responseText);
+            } catch (e) {
+                console.error("Failed to parse services.json:", e);
+                return [];
+            }
+        }
+        console.error("Failed to load services.json, status:", xhr.status);
+        return [];
+    }
+
     // Define the available chat models and their properties
     // This property combines both predefined and custom sites
     property var models: {
-        // Define base models with their default properties
-        let baseModels = [{
-            "id": "t3",
-            "url": "https://t3.chat",
-            "text": "T3 Chat",
-            "prop": "showT3Chat"
-        }, {
-            "id": "duckduckgo",
-            "url": "https://duckduckgo.com/chat",
-            "text": "DuckDuckGo Chat",
-            "prop": "showDuckDuckGoChat"
-        }, {
-            "id": "chatgpt",
-            "url": "https://chatgpt.com",
-            "text": "ChatGPT",
-            "prop": "showChatGPT"
-        }, {
-            "id": "huggingface",
-            "url": "https://huggingface.co/chat",
-            "text": "HugginChat",
-            "prop": "showHugginChat"
-        }, {
-            "id": "copilot",
-            "url": "https://copilot.microsoft.com/",
-            "text": "Bing Copilot",
-            "prop": "showBingCopilot"
-        }, {
-            "id": "google",
-            "url": "https://gemini.google.com/app",
-            "text": "Google Gemini",
-            "prop": "showGoogleGemini"
-        }, {
-            "id": "blackbox",
-            "url": "https://www.blackbox.ai",
-            "text": "BlackBox AI",
-            "prop": "showBlackBox"
-        }, {
-            "id": "you",
-            "url": "https://you.com/?chatMode=default",
-            "text": "You",
-            "prop": "showYou"
-        }, {
-            "id": "perplexity",
-            "url": "https://www.perplexity.ai",
-            "text": "Perplexity",
-            "prop": "showPerplexity"
-        }, {
-            "id": "lobechat",
-            "url": "https://lobechat.com/chat",
-            "text": "LobeChat",
-            "prop": "showLobeChat"
-        }, {
-            "id": "bigagi",
-            "url": "https://get.big-agi.com",
-            "text": "Big-AGI",
-            "prop": "showBigAGI"
-        }, {
-            "id": "claude",
-            "url": "https://claude.ai/new",
-            "text": "Claude",
-            "prop": "showClaude"
-        }, {
-            "id": "deepseek",
-            "url": "https://chat.deepseek.com",
-            "text": "DeepSeek",
-            "prop": "showDeepSeek"
-        }, {
-            "id": "meta",
-            "url": "https://www.meta.ai",
-            "text": "Meta AI",
-            "prop": "showMetaAI"
-        }, {
-            "id": "grok",
-            "url": "https://x.com/i/grok",
-            "text": "Grok",
-            "prop": "showGrok"
-        }];
+        // Load base models from the JSON file
+        let baseModels = loadServices().map(function(service) {
+            return {
+                "id": service.id,
+                "url": service.url,
+                "text": service.name,
+                "prop": service.config_key
+            };
+        });
         // Add custom sites from configuration to the models list
         let customSites = plasmoid.configuration.customSites || [];
         if (Array.isArray(customSites)) {

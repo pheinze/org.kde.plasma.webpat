@@ -1,0 +1,92 @@
+[
+  {
+    "id": "t3",
+    "name": "T3 Chat",
+    "url": "https://t3.chat",
+    "config_key": "showT3Chat"
+  },
+  {
+    "id": "duckduckgo",
+    "name": "DuckDuckGo Chat",
+    "url": "https://duckduckgo.com/chat",
+    "config_key": "showDuckDuckGoChat"
+  },
+  {
+    "id": "chatgpt",
+    "name": "ChatGPT",
+    "url": "https://chatgpt.com",
+    "config_key": "showChatGPT"
+  },
+  {
+    "id": "huggingface",
+    "name": "HugginChat",
+    "url": "https://huggingface.co/chat",
+    "config_key": "showHugginChat"
+  },
+  {
+    "id": "copilot",
+    "name": "Bing Copilot",
+    "url": "https://copilot.microsoft.com/",
+    "config_key": "showBingCopilot"
+  },
+  {
+    "id": "google",
+    "name": "Google Gemini",
+    "url": "https://gemini.google.com/app",
+    "config_key": "showGoogleGemini"
+  },
+  {
+    "id": "blackbox",
+    "name": "BlackBox AI",
+    "url": "https://www.blackbox.ai",
+    "config_key": "showBlackBox"
+  },
+  {
+    "id": "you",
+    "name": "You",
+    "url": "https://you.com/?chatMode=default",
+    "config_key": "showYou"
+  },
+  {
+    "id": "perplexity",
+    "name": "Perplexity",
+    "url": "https://www.perplexity.ai",
+    "config_key": "showPerplexity"
+  },
+  {
+    "id": "lobechat",
+    "name": "LobeChat",
+    "url": "https://lobechat.com/chat",
+    "config_key": "showLobeChat"
+  },
+  {
+    "id": "bigagi",
+    "name": "Big-AGI",
+    "url": "https://get.big-agi.com",
+    "config_key": "showBigAGI"
+  },
+  {
+    "id": "claude",
+    "name": "Claude",
+    "url": "https://claude.ai/new",
+    "config_key": "showClaude"
+  },
+  {
+    "id": "deepseek",
+    "name": "DeepSeek",
+    "url": "https://chat.deepseek.com",
+    "config_key": "showDeepSeek"
+  },
+  {
+    "id": "meta",
+    "name": "Meta AI",
+    "url": "https://www.meta.ai",
+    "config_key": "showMetaAI"
+  },
+  {
+    "id": "grok",
+    "name": "Grok",
+    "url": "https://x.com/i/grok",
+    "config_key": "showGrok"
+  }
+]
