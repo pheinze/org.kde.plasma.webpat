@@ -160,6 +160,9 @@ PlasmoidItem {
         Layout.minimumHeight: Kirigami.Units.gridUnit * 39
         Component.onCompleted: {
             reorderComponents();
+            if (plasmoid.configuration.loadOnStartup) {
+                webviewLoader.active = true;
+            }
         }
         spacing: 0
 

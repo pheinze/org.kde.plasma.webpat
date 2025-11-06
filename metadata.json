@@ -3,21 +3,17 @@
     "KPlugin": {
         "Authors": [
             {
-                "Email": "denysmb@zoho.com",
-                "Name": "Denys Madureira"
-            },
-            {
-                "Email": "bigbruno@gmail.com",
-                "Name": "Bruno Gonçalves"
+                "Email": "patlab@proton.me",
+                "Name": "PatLab"
             }
         ],
         "Category": "Online Services",
-        "Description": "A range of chatbots in your desktop",
+        "Description": "KDE Plasmoid with multi URL and features.",
         "Icon": "applications-internet",
-        "Id": "ChatAI-Plasmoid",
+        "Id": "webpat-plasmoid",
         "License": "GPL-2.0+",
-        "Name": "ChatAI",
-        "Website": "https://github.com/DenysMb/ChatAI-Plasmoid"
+        "Name": "webpat",
+        "Website": "https://patlab.io"
     },
     "X-Plasma-API-Minimum-Version": "6.0"
 }

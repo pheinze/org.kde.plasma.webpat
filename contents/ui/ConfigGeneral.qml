@@ -326,14 +326,14 @@ KCM.SimpleKCM {
                     Layout.fillWidth: true
                     type: Kirigami.MessageType.Information
                     text: i18n("If notifications are not working create the file:") + `
-~/.local/share/knotifications6/chatai_plasmoid.notifyrc ` + i18n("containing the following text:") + `
+~/.local/share/knotifications6/webpat_plasmoid.notifyrc ` + i18n("containing the following text:") + `
 
 [Global]
 IconName=applications-internet
-DesktopEntry=ChatAI
-Comment=ChatAI
+DesktopEntry=webpat
+Comment=webpat
 [Event/notification]
-Name=ChatAI
+Name=webpat
 Action=Popup`
                     visible: notificationsEnabled.checked
                 }
@@ -517,7 +517,7 @@ Action=Popup`
                     // Criar WebEngineProfile para gerenciar o cache
                     WebEngineProfile {
                         id: cacheProfile
-                        storageName: "chat-ai"
+                        storageName: "webpat"
                         offTheRecord: false
                         httpCacheType: WebEngineProfile.DiskHttpCache
                         persistentCookiesPolicy: WebEngineProfile.ForcePersistentCookies
@@ -546,7 +546,7 @@ Action=Popup`
                                 icon.name: "folder"
                                 onClicked: {
                                     let profilePath = StandardPaths.writableLocation(StandardPaths.GenericDataLocation) +
-                                    "/plasmashell/QtWebEngine/chat-ai";
+                                    "/plasmashell/QtWebEngine/webpat";
                                 Qt.openUrlExternally("file://" + profilePath);
                                 }
                             }
@@ -563,7 +563,7 @@ Action=Popup`
                     type: Kirigami.MessageType.Information
                     text: i18n("Cache location: %1\nProfile location: %2",
                                Qt.resolvedUrl(cacheProfile.cachePath).toString().replace("file://", ""),
-                               StandardPaths.writableLocation(StandardPaths.GenericDataLocation) + "/plasmashell/QtWebEngine/chat-ai")
+                               StandardPaths.writableLocation(StandardPaths.GenericDataLocation) + "/plasmashell/QtWebEngine/webpat")
                     visible: true
                 }
 

@@ -75,15 +75,15 @@ Item {
 
     Notification {
         id: webNotification
-        componentName: "chatai_plasmoid"
+        componentName: "webpat_plasmoid"
         eventId: "notification"
         defaultAction: i18n("Open")
-        title: i18n("ChatAI")
+        title: i18n("webpat")
         iconName: "dialog-information"
     }
 
     function showNotification(title, message, icon = "dialog-information") {
-        webNotification.title = title || i18n("ChatAI")
+        webNotification.title = title || i18n("webpat")
         webNotification.text = message
         webNotification.iconName = icon
         webNotification.sendEvent()
@@ -510,7 +510,7 @@ Item {
         WebEngineProfile {
             id: webProfile
             httpUserAgent: getUserAgent()
-            storageName: "chat-ai"
+            storageName: "webpat"
             offTheRecord: false
             httpCacheType: WebEngineProfile.DiskHttpCache
             persistentCookiesPolicy: WebEngineProfile.ForcePersistentCookies
