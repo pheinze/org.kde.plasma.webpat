@@ -134,7 +134,7 @@ KCM.SimpleKCM {
         QQC2.CheckBox {
             id: hidePrintButton
 
-            text: i18n("Hide Auto-Hide button")
+            text: i18n("Hide Print button")
             checked: plasmoid.configuration.hidePrintButton
             onCheckedChanged: plasmoid.configuration.hidePrintButton = checked
             Layout.fillWidth: true
@@ -150,11 +150,11 @@ KCM.SimpleKCM {
         }
 
         QQC2.CheckBox {
-            id: hideHomeButton
+            id: hideUrlComboBox
 
-            text: i18n("Hide Home button")
-            checked: plasmoid.configuration.hideHomeButton
-            onCheckedChanged: plasmoid.configuration.hideHomeButton = checked
+            text: i18n("Hide selection bar")
+            checked: plasmoid.configuration.hideUrlComboBox
+            onCheckedChanged: plasmoid.configuration.hideUrlComboBox = checked
             Layout.fillWidth: true
         }
 
@@ -189,7 +189,7 @@ KCM.SimpleKCM {
         Kirigami.InlineMessage {
             Layout.fillWidth: true
             text: i18n("You can still use the Go back to... and Keep open actions by right-clicking the widget icon.")
-            visible: hideHeader.checked || hideGoToButton.checked || hideKeepOpen.checked
+            visible: hideHeader.checked || plasmoid.configuration.hideUrlComboBox || hideKeepOpen.checked
         }
 
     }

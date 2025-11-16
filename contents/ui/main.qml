@@ -3,6 +3,7 @@ import QtQuick.Layouts
 import org.kde.kirigami 2.20 as Kirigami
 import org.kde.plasma.core as PlasmaCore
 import org.kde.plasma.plasmoid 2.0
+import "ServicesManager.js" as ServicesManager
 
 // Main plasmoid item that contains all the widget functionality
 PlasmoidItem {
@@ -11,87 +12,20 @@ PlasmoidItem {
     // Define the available chat models and their properties
     // This property combines both predefined and custom sites
     property var models: {
-        // Define base models with their default properties
-        let baseModels = [{
-            "id": "t3",
-            "url": "https://t3.chat",
-            "text": "T3 Chat",
-            "prop": "showT3Chat"
-        }, {
-            "id": "duckduckgo",
-            "url": "https://duckduckgo.com/chat",
-            "text": "DuckDuckGo Chat",
-            "prop": "showDuckDuckGoChat"
-        }, {
-            "id": "chatgpt",
-            "url": "https://chatgpt.com",
-            "text": "ChatGPT",
-            "prop": "showChatGPT"
-        }, {
-            "id": "huggingface",
-            "url": "https://huggingface.co/chat",
-            "text": "HugginChat",
-            "prop": "showHugginChat"
-        }, {
-            "id": "copilot",
-            "url": "https://copilot.microsoft.com/",
-            "text": "Bing Copilot",
-            "prop": "showBingCopilot"
-        }, {
-            "id": "google",
-            "url": "https://gemini.google.com/app",
-            "text": "Google Gemini",
-            "prop": "showGoogleGemini"
-        }, {
-            "id": "blackbox",
-            "url": "https://www.blackbox.ai",
-            "text": "BlackBox AI",
-            "prop": "showBlackBox"
-        }, {
-            "id": "you",
-            "url": "https://you.com/?chatMode=default",
-            "text": "You",
-            "prop": "showYou"
-        }, {
-            "id": "perplexity",
-            "url": "https://www.perplexity.ai",
-            "text": "Perplexity",
-            "prop": "showPerplexity"
-        }, {
-            "id": "lobechat",
-            "url": "https://lobechat.com/chat",
-            "text": "LobeChat",
-            "prop": "showLobeChat"
-        }, {
-            "id": "bigagi",
-            "url": "https://get.big-agi.com",
-            "text": "Big-AGI",
-            "prop": "showBigAGI"
-        }, {
-            "id": "claude",
-            "url": "https://claude.ai/new",
-            "text": "Claude",
-            "prop": "showClaude"
-        }, {
-            "id": "deepseek",
-            "url": "https://chat.deepseek.com",
-            "text": "DeepSeek",
-            "prop": "showDeepSeek"
-        }, {
-            "id": "meta",
-            "url": "https://www.meta.ai",
-            "text": "Meta AI",
-            "prop": "showMetaAI"
-        }, {
-            "id": "grok",
-            "url": "https://x.com/i/grok",
-            "text": "Grok",
-            "prop": "showGrok"
-        }];
+        // Load base models from the JSON file
+        let baseModels = ServicesManager.loadServices(plasmoid).map(function(service) {
+            return {
+                "id": service.id,
+                "url": service.url,
+                "text": service.name,
+                "prop": service.config_key
+            };
+        });
         // Add custom sites from configuration to the models list
-        let customSites = plasmoid.configuration.customSites || [];
-        if (Array.isArray(customSites)) {
-            customSites.forEach((site) => {
+        let customSitesString = plasmoid.configuration.customSites || "";
+        if (customSitesString) {
+            let customSitesArray = customSitesString.split(',');
+            customSitesArray.forEach((site) => {
                 if (site && typeof site === 'string' && site.includes('|')) {
                     const [name, url] = site.split('|');
                     if (name && url)
@@ -112,7 +46,6 @@ PlasmoidItem {
     Component.onCompleted: {
         // If loadOnStartup is enabled in configuration
         if (plasmoid.configuration.loadOnStartup) {
-            webviewLoader.active = true; // Activate the WebView loader
             root.expanded = true; // Expand the plasmoid
         }
     }
@@ -122,7 +55,7 @@ PlasmoidItem {
         id: compactRep
 
         models: root.models
-        webview: root.webviewRoot ? root.webviewRoot.webview : null
+        webview: mainLayout && mainLayout.webviewRoot ? mainLayout.webviewRoot.webview : null
     }
 
     // Widget appearance when expanded (full view)
@@ -161,6 +94,9 @@ PlasmoidItem {
         Layout.minimumHeight: Kirigami.Units.gridUnit * 39
         Component.onCompleted: {
             reorderComponents();
+            if (plasmoid.configuration.loadOnStartup) {
+                webviewLoader.active = true;
+            }
         }
         spacing: 0
 

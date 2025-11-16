@@ -7,10 +7,18 @@ import org.kde.kirigami 2.20 as Kirigami
 import org.kde.plasma.components as PlasmaComponents3
 import Qt.labs.platform 1.1
 import QtWebEngine
+import "ServicesManager.js" as ServicesManager
 
 // Main configuration component for general settings
 KCM.SimpleKCM {
     id: configRoot
+
+    property var services: []
+
+    Component.onCompleted: {
+        services = ServicesManager.loadServices(plasmoid);
+    }
+
 
     // Parse the comma-separated string and add valid entries to the model
     function loadSitesFromConfig() {
@@ -115,63 +123,16 @@ KCM.SimpleKCM {
 
                 // Dynamic list of predefined sites with checkboxes
                 Repeater {
-                    // List of supported chat services with their configuration properties
-
-                    model: [{
-                        "id": "showDuckDuckGoChat",
-                        "text": "DuckDuckGo Chat"
-                    }, {
-                        "id": "showChatGPT",
-                        "text": "ChatGPT"
-                    }, {
-                        "id": "showHugginChat",
-                        "text": "HugginChat"
-                    }, {
-                        "id": "showGoogleGemini",
-                        "text": "Google Gemini"
-                    }, {
-                        "id": "showYou",
-                        "text": "You"
-                    }, {
-                        "id": "showPerplexity",
-                        "text": "Perplexity"
-                    }, {
-                        "id": "showBlackBox",
-                        "text": "BlackBox AI"
-                    }, {
-                        "id": "showBingCopilot",
-                        "text": "Bing Copilot"
-                    }, {
-                        "id": "showBigAGI",
-                        "text": "Big AGI"
-                    }, {
-                        "id": "showLobeChat",
-                        "text": "LobeChat"
-                    }, {
-                        "id": "showClaude",
-                        "text": "Claude"
-                    }, {
-                        "id": "showDeepSeek",
-                        "text": "DeepSeek"
-                    }, {
-                        "id": "showMetaAI",
-                        "text": "Meta AI"
-                    }, {
-                        "id": "showGrok",
-                        "text": "Grok"
-                    }, {
-                        "id": "showT3Chat",
-                        "text": "T3 Chat"
-                    }]
+                    model: configRoot.services
 
                     delegate: ColumnLayout {
                         Layout.fillWidth: true
                         spacing: 0
 
                         QQC2.CheckBox {
-                            text: modelData.text
-                            checked: plasmoid.configuration[modelData.id]
-                            onCheckedChanged: plasmoid.configuration[modelData.id] = checked
+                            text: modelData.name
+                            checked: plasmoid.configuration[modelData.config_key]
+                            onCheckedChanged: plasmoid.configuration[modelData.config_key] = checked
                             Layout.fillWidth: true
                         }
 
@@ -179,7 +140,7 @@ KCM.SimpleKCM {
                             Layout.fillWidth: true
                             type: Kirigami.MessageType.Information
                             text: i18n("Claude.ai only allows account creation or Google login in well-known browsers. To use it in this Plasmoid, you need to use login credentials previously created in a traditional browser.")
-                            visible: modelData.id === "showClaude" && plasmoid.configuration.showClaude
+                            visible: modelData.id === "claude" && plasmoid.configuration.showClaude
                         }
                     }
                 }
@@ -326,14 +287,14 @@ KCM.SimpleKCM {
                     Layout.fillWidth: true
                     type: Kirigami.MessageType.Information
                     text: i18n("If notifications are not working create the file:") + `
-~/.local/share/knotifications6/chatai_plasmoid.notifyrc ` + i18n("containing the following text:") + `
+~/.local/share/knotifications6/webpat_plasmoid.notifyrc ` + i18n("containing the following text:") + `
 
 [Global]
 IconName=applications-internet
-DesktopEntry=ChatAI
-Comment=ChatAI
+DesktopEntry=webpat
+Comment=webpat
 [Event/notification]
-Name=ChatAI
+Name=webpat
 Action=Popup`
                     visible: notificationsEnabled.checked
                 }
@@ -517,7 +478,7 @@ Action=Popup`
                     // Criar WebEngineProfile para gerenciar o cache
                     WebEngineProfile {
                         id: cacheProfile
-                        storageName: "chat-ai"
+                        storageName: "webpat"
                         offTheRecord: false
                         httpCacheType: WebEngineProfile.DiskHttpCache
                         persistentCookiesPolicy: WebEngineProfile.ForcePersistentCookies
@@ -545,9 +506,9 @@ Action=Popup`
                                 text: i18n("Open Profile Folder")
                                 icon.name: "folder"
                                 onClicked: {
-                                    let profilePath = StandardPaths.writableLocation(StandardPaths.HomeLocation) +
-                                    "/.local/share/plasmashell/QtWebEngine/chat-ai";
-                                Qt.openUrlExternally(profilePath);
+                                    let profilePath = StandardPaths.writableLocation(StandardPaths.GenericDataLocation) +
+                                    "/plasmashell/QtWebEngine/webpat";
+                                Qt.openUrlExternally("file://" + profilePath);
                                 }
                             }
 
@@ -563,7 +524,7 @@ Action=Popup`
                     type: Kirigami.MessageType.Information
                     text: i18n("Cache location: %1\nProfile location: %2",
                                Qt.resolvedUrl(cacheProfile.cachePath).toString().replace("file://", ""),
-                               StandardPaths.writableLocation(StandardPaths.HomeLocation) + "/.local/share/plasmashell/QtWebEngine/chat-ai")
+                               StandardPaths.writableLocation(StandardPaths.GenericDataLocation) + "/plasmashell/QtWebEngine/webpat")
                     visible: true
                 }
 
